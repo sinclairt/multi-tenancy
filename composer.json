@@ -1,0 +1,22 @@
+{
+  "name": "sinclair/multi-tenancy",
+  "description": "Multi tenancy solution inside a single app and single database",
+  "type": "library",
+  "require": {},
+  "autoload": {
+    "psr-0": {
+      "Sinclair\\MultiTenancy": "src/"
+    },
+    "files": [
+      "src/helpers.php"
+    ]
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Tom Sinclair",
+      "email": "tom.sinclair31@gmail.com"
+    }
+  ],
+  "minimum-stability": "dev"
+}
