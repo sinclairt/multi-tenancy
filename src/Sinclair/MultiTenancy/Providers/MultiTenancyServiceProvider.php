@@ -23,7 +23,17 @@ class MultiTenancyServiceProvider extends ServiceProvider
         });
 
         $this->publishes([
-            __DIR__ . '../../../config/multi-tenancy.php' => config_path('multi-tenancy.php'),
+            __DIR__ . '/../../../config/multi-tenancy.php' => config_path('multi-tenancy.php'),
         ]);
+    }
+
+    /**
+     * Register the service provider.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        //
     }
 }
