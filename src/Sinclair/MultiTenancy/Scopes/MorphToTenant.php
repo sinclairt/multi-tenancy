@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
 
+/**
+ * Class MorphToTenant
+ * @package Sinclair\MultiTenancy\Scopes
+ */
 class MorphToTenant extends MultiTenantScope implements Scope
 {
     /**

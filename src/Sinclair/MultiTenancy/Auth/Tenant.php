@@ -22,7 +22,7 @@ class Tenant extends EloquentUserProvider implements UserProvider
      *
      * @param  array $credentials
      *
-     * @return \Illuminate\Contracts\Auth\Authenticatable|null
+     * @return mixed
      */
     public function retrieveByCredentials( array $credentials )
     {
@@ -59,7 +59,7 @@ class Tenant extends EloquentUserProvider implements UserProvider
 
         $passwordCheck = $this->hasher->check($plain, $user->getAuthPassword());
 
-        return $passwordCheck && ( $user->belongsToTenant() || $user->hasRoles(config('multi-tenancy.ignore-roles'), false) );
+        return $passwordCheck && ( $user->belongsToTenant() || $user->hasRoles(config('multi-tenancy.ignore-roles')) );
     }
 
     /**
@@ -67,7 +67,7 @@ class Tenant extends EloquentUserProvider implements UserProvider
      *
      * @param  mixed $identifier
      *
-     * @return \Illuminate\Contracts\Auth\Authenticatable|null
+     * @return mixed
      */
     public function retrieveById( $identifier )
     {

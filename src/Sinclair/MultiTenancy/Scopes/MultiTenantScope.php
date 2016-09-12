@@ -4,7 +4,7 @@ namespace Sinclair\MultiTenancy\Scopes;
 
 /**
  * Class MultiTenantScope
- * @package App\Scopes
+ * @package Sinclair\MultiTenancy\Scopes
  */
 abstract class MultiTenantScope
 {
@@ -19,7 +19,7 @@ abstract class MultiTenantScope
             return call_user_func_array($callback, compact('user', 'roles'));
 
         if ( !is_null($user) && !empty( $roles ) )
-            return !$user->hasRoles($roles, false);
+            return !$user->hasRoles($roles);
 
         return config('multi-tenancy.should-apply-default', true);
     }
@@ -41,8 +41,7 @@ abstract class MultiTenantScope
      */
     private function getAuthUser()
     {
-        return \Auth::guard(!is_null(constant('TENANT_SLUG')) ? 'tenant' : null)
-                    ->user();
+        return auth()->user();
     }
 
     /**
@@ -50,7 +49,7 @@ abstract class MultiTenantScope
      */
     private function getRolesToIgnore()
     {
-        return config('multi-tenancy.ignore-roles');
+        return config('multi-tenancy.ignore-roles', []);
     }
 
     /**
@@ -58,6 +57,6 @@ abstract class MultiTenantScope
      */
     private function getSuppliedCallback()
     {
-        return config('multi-tenancy.should_apply_callback', null);
+        return config('multi-tenancy.should-apply-callback', null);
     }
 }

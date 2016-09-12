@@ -4,12 +4,14 @@ namespace Sinclair\MultiTenancy\Traits;
 
 /**
  * Class MorphToTenant
- * @package App\Traits
+ * @package Sinclair\MultiTenancy\Traits
  */
 trait MorphToTenant
 {
     /**
      * Get all of the tags for the post.
+     *
+     * return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
     public function tenants()
     {

@@ -3,6 +3,12 @@
   "description": "Multi tenancy solution inside a single app and single database",
   "type": "library",
   "require": {},
+  "require-dev": {
+    "phpunit/phpunit": "~4.0",
+    "phpspec/phpspec": "~2.1",
+    "laracasts/testdummy": "~2.0",
+    "laravel/laravel": "dev-develop"
+  },
   "autoload": {
     "psr-0": {
       "Sinclair\\MultiTenancy": "src/"
@@ -18,5 +24,8 @@
       "email": "tom.sinclair31@gmail.com"
     }
   ],
-  "minimum-stability": "dev"
+  "minimum-stability": "dev",
+  "scripts": {
+    "phpunit": "./vendor/bin/phpunit;"
+  }
 }

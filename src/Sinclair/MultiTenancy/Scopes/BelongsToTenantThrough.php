@@ -2,12 +2,11 @@
 
 namespace Sinclair\MultiTenancy\Scopes;
 
-use App\Traits\MorphToTenant as MorphToCompanyTrait;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
-use Sinclair\MultiTenancy\Traits\MorphToTenant;
+use Sinclair\MultiTenancy\Traits\IsMultiTenantUser as IsMultiTenantUserTrait;
+use Sinclair\MultiTenancy\Traits\MorphToTenant as MorphToTenantTrait;
 
 /**
  * Class BelongsToCompanyThrough
@@ -72,7 +71,7 @@ class BelongsToTenantThrough extends MultiTenantScope implements Scope
 
         return $builder->{$function}($relationship, function ( $query ) use ( $model, $relationship )
         {
-            $relationship = $this->isMorph($model, $relationship) ? str_plural(config('multi-tenant.relationship.name')) : config('multi-tenant.relationship.name');
+            $relationship = $this->isMorph($model, $relationship) || $this->isMultiTenantUser($model, $relationship) ? str_plural(config('multi-tenancy.relationship.name', 'tenant')) : config('multi-tenancy.relationship.name', 'tenant');
 
             $query->whereHas($relationship, function ( $query )
             {
@@ -91,7 +90,7 @@ class BelongsToTenantThrough extends MultiTenantScope implements Scope
     private function getRelatedModel( Model $model, $relationship )
     {
         if ( sizeof(explode('.', $relationship)) == 1 )
-            return $model->$relationship()
+            return $model->{$relationship}()
                          ->getQuery()
                          ->getModel();
 
@@ -110,17 +109,7 @@ class BelongsToTenantThrough extends MultiTenantScope implements Scope
      */
     private function isMorph( $model, $relationship )
     {
-        $methods = $this->getRelatedModelMethods($model, $relationship);
-
-        if ( empty( $methods ) )
-        {
-            foreach ( explode('.', $relationship) as $i => $part )
-                $model = $this->getRelatedModel($model, $part);
-
-            $methods = class_uses($model);
-        }
-
-        return in_array(MorphToTenant::class, $methods);
+        return $this->relationUses($model, $relationship, MorphToTenantTrait::class);
     }
 
     /**
@@ -133,6 +122,39 @@ class BelongsToTenantThrough extends MultiTenantScope implements Scope
     {
         $related = $this->getRelatedModel($model, $relationship);
 
-        return is_null($related) ? [ ] : class_uses($related);
+        return is_null($related) ? [] : class_uses($related);
+    }
+
+    /**
+     * @param $model
+     * @param $relationship
+     *
+     * @return bool
+     */
+    private function isMultiTenantUser( $model, $relationship )
+    {
+        return $this->relationUses($model, $relationship, IsMultiTenantUserTrait::class);
+    }
+
+    /**
+     * @param $model
+     * @param $relationship
+     * @param $class
+     *
+     * @return bool
+     */
+    private function relationUses( $model, $relationship, $class )
+    {
+        $methods = $this->getRelatedModelMethods($model, $relationship);
+
+        if ( empty( $methods ) )
+        {
+            foreach ( explode('.', $relationship) as $i => $part )
+                $model = $this->getRelatedModel($model, $part);
+
+            $methods = class_uses($model);
+        }
+
+        return in_array($class, $methods);
     }
 }

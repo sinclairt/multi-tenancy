@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
 
+/**
+ * Class BelongsToTenant
+ * @package Sinclair\MultiTenancy\Scopes
+ */
 class BelongsToTenant extends MultiTenantScope implements Scope
 {
     /**

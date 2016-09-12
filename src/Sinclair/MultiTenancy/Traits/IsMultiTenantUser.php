@@ -4,6 +4,10 @@ namespace Sinclair\MultiTenancy\Traits;
 
 use Illuminate\Database\Eloquent\Builder;
 
+/**
+ * Class IsMultiTenantUser
+ * @package Sinclair\MultiTenancy\Traits
+ */
 trait IsMultiTenantUser
 {
     use MorphToTenant;
@@ -11,20 +15,11 @@ trait IsMultiTenantUser
     /**
      * @param array $roles
      *
-     * @param bool $withScopes
-     *
      * @return bool
      */
-    public function hasRoles( array $roles = [ ], $withScopes = true )
+    public function hasRoles( array $roles = [ ])
     {
-        $query = $withScopes ? $this->newQuery() : $this->newQueryWithoutScopes();
-
-        return $query->where('id', $this->id)
-                     ->whereHas('roles', function ( Builder $query ) use ( $roles, $withScopes )
-                     {
-                         $query->whereIn('name', $roles, 'or');
-                     })
-                     ->count() > 0;
+        return sizeof(array_intersect($this->roles->pluck('name')->toArray(), $roles)) > 0;
     }
 
     /**

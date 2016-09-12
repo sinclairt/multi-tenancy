@@ -46,21 +46,4 @@ trait BelongsToTenant
             $query->where(config('multi-tenancy.relationship.table') . '.' . config('multi-tenancy.relationship.slug_column_name'), TENANT_SLUG);
         });
     }
-
-    /*
-     * Mutators
-     */
-
-    /**
-     * @param $value
-     */
-    public function setTenantIdAttribute( $value )
-    {
-        $tenant_id = array_get($this->attributes, 'tenant_id');
-
-        if ( ( $tenant_id == '' || is_null($tenant_id) ) && $tenant = getTenantBySlug() )
-            $this->attributes[ 'tenant_id' ] = $tenant->id;
-        else
-            $this->attributes[ 'tenant_id' ] = $value;
-    }
 }
