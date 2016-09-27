@@ -40,7 +40,24 @@ Publish the config:
     if true will automatically apply the scopes to the models, this is only used if the callback is null and the ignore roles are empty
     
 **role class** _default(\App\Models\Role::class)_    
-    The name of your role class - leave as an empty string if you're not using roles 
+    The name of your role class - leave as an empty string if you're not using roles
+
+###Set Up
+Inside `config/auth.php` you will need to set up a new guard and a new provider like so:
+```
+// guard
+'tenant' => [
+            'driver' => 'session',
+            'provider' => 'tenants'
+        ]
+
+// provider
+'tenants' => [
+            'driver' => 'tenant',
+            'model'  => App\Models\User::class,
+        ],
+```
+
 
 ###Usage
 The multi-tenancy package works by using global scopes to restrict queries based on a 
