@@ -75,9 +75,12 @@ constant however you wish, but in order for this package to work it must be set.
 To avoid having a foreign key on every single database table, the multi-tenancy package uses 
 a models relationships to constrain queries. There a three ways a model can be connected to a 
 tenant:
+
  * Directly - the model belongs to the tenant
+
  * Through - the model belongs to the tenant through another model or chain of models
- * Morph - the model belongs to the tenant via a many-to-many relationship (poly-morphic included)
+
+ * Morph - the model belongs to the tenant via a many-to-many relationship (polymorphic included)
  
 There are three scopes that can be applied based on the criteria above, and there are traits to ease the implementation for two of them:
 the ``` BelongsToTenant``` and ``` MorphToTenant ``` scopes have respective traits, just use them in your models and that's it.
