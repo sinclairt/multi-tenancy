@@ -59,7 +59,12 @@ class Tenant extends EloquentUserProvider implements UserProvider
 
         $passwordCheck = $this->hasher->check($plain, $user->getAuthPassword());
 
-        return $passwordCheck && ( $user->belongsToTenant() || $user->hasRoles(config('multi-tenancy.ignore-roles')) );
+        $roles = config('multi-tenancy.ignore-roles');
+
+        if ( sizeof($roles) > 0 )
+            return $passwordCheck && $user->hasroles($roles);
+
+        return $passwordCheck && $user->belongsToTenant();
     }
 
     /**
