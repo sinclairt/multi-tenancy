@@ -40,21 +40,47 @@ Publish the config:
     if true will automatically apply the scopes to the models, this is only used if the callback is null and the ignore roles are empty
     
 **role class** _default(\App\Models\Role::class)_    
-    The name of your role class - leave as an empty string if you're not using roles 
+    The name of your role class - leave as an empty string if you're not using roles
 
-###Usage
+###Set Up
+Inside `config/auth.php` you will need to set up a new guard and a new provider like so:
+```
+// guard
+'tenant' => [
+            'driver' => 'session',
+            'provider' => 'tenants'
+        ]
+
+// provider
+'tenants' => [
+            'driver' => 'tenant',
+            'model'  => App\Models\User::class,
+        ],
+```
+
+You may also like to set the default guard to tenant or set an if statement up, otherwise you will need to specify the guard when interacting with the `Auth` object:
+```
+'guard'     => !is_null(constant('TENANT_SLUG')) ? 'tenant' : 'web',
+```
+
 The multi-tenancy package works by using global scopes to restrict queries based on a 
 constant ``` TENANT_SLUG ```. This package assumes you are using a sub-domain to control 
 which tenant is required by your user; there is a helper function to place inside 
 bootstrap/app.php ``` bootstrapMultiTenancy() ```, but, of course, you are free to set the 
 constant however you wish, but in order for this package to work it must be set.
 
+
+###Usage
+
 To avoid having a foreign key on every single database table, the multi-tenancy package uses 
 a models relationships to constrain queries. There a three ways a model can be connected to a 
 tenant:
+
  * Directly - the model belongs to the tenant
+
  * Through - the model belongs to the tenant through another model or chain of models
- * Morph - the model belongs to the tenant via a many-to-many relationship (poly-morphic included)
+
+ * Morph - the model belongs to the tenant via a many-to-many relationship (polymorphic included)
  
 There are three scopes that can be applied based on the criteria above, and there are traits to ease the implementation for two of them:
 the ``` BelongsToTenant``` and ``` MorphToTenant ``` scopes have respective traits, just use them in your models and that's it.
@@ -78,15 +104,6 @@ One final scenario is if your model is a polymorphic many-to-many and could pote
 ``` static::addGlobalScope(new BelongsToTenantThrough([ 'users', 'drivers.user', 'locations' ])); ```
 
 In this example we have a Phone model which stores numbers against various models: users, drivers, and locations, so we need to check whether it belongs to our given tenant through any of those connections.
-
-###Auth
-
-This package provides a Tenant Auth Guard to use out of the box, be aware of this when you are interacting with you app, as the web guard is the default; it may be worth setting something like this to handle it:
-```
-// config/auth.php
-
-'guard'     => !is_null(constant('TENANT_SLUG')) ? 'tenant' : 'web',
-```
 
 ###User Model
 Because the multi-tenancy package allows you to have a single database, it means a user can belong to more than one tenant if you want them to, useful for admin roles (although I recommend using the ignore-roles config value). If you use the sub-domain solution for multi-tenancy this will force the user to login to new tenant areas but it means they can have the same credentials, roles, and permissions across tenants. 
