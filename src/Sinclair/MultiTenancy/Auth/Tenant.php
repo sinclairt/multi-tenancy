@@ -61,9 +61,15 @@ class Tenant extends EloquentUserProvider implements UserProvider
 
         $roles = config('multi-tenancy.ignore-roles');
 
+        // are we ignoring any roles?
         if ( sizeof($roles) > 0 )
-            return $passwordCheck && $user->hasroles($roles);
+            return $passwordCheck && $user->hasRoles($roles);
 
+        // are there any roles which should be allowed access to the public domain?
+        if ( TENANT_SLUG == 'public' && sizeof($publicRoles = config('multi-tenancy.public-space-roles')) )
+            return $passwordCheck && $user->hasRoles($publicRoles);
+
+        // otherwise lets check the credentials and that the user belongs to the tenant
         return $passwordCheck && $user->belongsToTenant();
     }
 

@@ -15,6 +15,9 @@ Publish the config:
 **ignore-roles** _default([ 'super-admin' ])_    
     if you don't want your app to apply the multi-tenancy constraints add the roles here, I've assumed super-admin out of the box, but feel free to change this or leave as an empty array if you're not using roles
     
+**public-space-roles** _default(['super-admin'])_   
+    if you would like to protect your public domain with auth routes, you can set which roles should be allowed access to this area 
+    
 **relationship name** _default('tenant')_   
     this is the name of the relationship method on your models, the plural is assumed for many-to-many
     

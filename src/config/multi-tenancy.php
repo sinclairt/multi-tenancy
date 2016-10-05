@@ -2,6 +2,7 @@
 
 return [
     'ignore-roles'          => [ 'super-admin' ],
+    'public-space-roles'    => [ 'super-admin' ],
     'relationship'          => [
         'name'             => 'tenant',
         'table'            => 'tenants',
