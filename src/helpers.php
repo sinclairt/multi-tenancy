@@ -29,9 +29,13 @@ if ( !function_exists('bootstrapMultiTenancy') )
         elseif ( isset( $_SERVER[ 'HTTP_HOST' ] ) )
         {
             if ( !defined('TENANT_SLUG') )
-                sizeof($parts = explode('.', $_SERVER[ 'HTTP_HOST' ])) > 2 ?
-                    define('TENANT_SLUG', str_replace([ 'http://', 'https://', 'www.' ], '', $parts[ 0 ])) :
-                    define('TENANT_SLUG', 'public');
+            {
+                $subDomain = str_replace($_SERVER[ 'SERVER_NAME' ], '', $_SERVER[ 'HTTP_HOST' ]);
+
+                $tenant = strlen($subDomain) > 0 ? $subDomain : 'public';
+
+                define('TENANT_SLUG', $tenant);
+            }
         }
         else
         {
