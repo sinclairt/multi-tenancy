@@ -26,10 +26,10 @@ if ( !function_exists('bootstrapMultiTenancy') )
             if ( !defined('TENANT_SLUG') )
                 define('TENANT_SLUG', env('TENANT_SLUG'));
         }
-        elseif ( isset( $_SERVER[ 'SERVER_NAME' ] ) )
+        elseif ( isset( $_SERVER[ 'HTTP_HOST' ] ) )
         {
             if ( !defined('TENANT_SLUG') )
-                sizeof($parts = explode('.', $_SERVER[ 'SERVER_NAME' ])) > 2 ?
+                sizeof($parts = explode('.', $_SERVER[ 'HTTP_HOST' ])) > 2 ?
                     define('TENANT_SLUG', str_replace([ 'http://', 'https://', 'www.' ], '', $parts[ 0 ])) :
                     define('TENANT_SLUG', 'public');
         }
