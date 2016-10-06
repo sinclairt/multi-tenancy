@@ -30,7 +30,7 @@ if ( !function_exists('bootstrapMultiTenancy') )
         {
             if ( !defined('TENANT_SLUG') )
             {
-                $subDomain = str_replace($_SERVER[ 'SERVER_NAME' ], '', $_SERVER[ 'HTTP_HOST' ]);
+                $subDomain = str_replace('.', '', str_replace($_SERVER[ 'SERVER_NAME' ], '', $_SERVER[ 'HTTP_HOST' ]));
 
                 $tenant = strlen($subDomain) > 0 ? $subDomain : 'public';
 
