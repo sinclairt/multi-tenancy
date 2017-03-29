@@ -45,7 +45,7 @@ Publish the config:
 **role class** _default(\App\Models\Role::class)_    
     The name of your role class - leave as an empty string if you're not using roles
 
-###Set Up
+### Set Up
 Inside `config/auth.php` you will need to set up a new guard and a new provider like so:
 ```
 // guard
