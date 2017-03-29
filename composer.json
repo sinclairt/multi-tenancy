@@ -1,5 +1,5 @@
 {
-  "name": "sinclair/multi-tenancy",
+  "name": "sinclairt/multi-tenancy",
   "description": "Multi tenancy solution inside a single app and single database",
   "type": "library",
   "require": {},
