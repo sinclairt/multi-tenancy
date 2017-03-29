@@ -1,16 +1,16 @@
-#Multi Tenancy
+# Multi Tenancy
 
-###Installation
-``` composer require sinclair/multi-tenancy ```
+### Installation
+``` composer require sinclairt/multi-tenancy ```
 
 Register the service provider in the config/app.php array:
 ``` \Sinclair\MultiTenancy\Providers\MultiTenancySericeProvider::class ```
 
-#####Optional
+##### Optional
 Publish the config:
 ``` php artisan vendor:publish ```
 
-#####Config
+##### Config
 
 **ignore-roles** _default([ 'super-admin' ])_    
     if you don't want your app to apply the multi-tenancy constraints add the roles here, I've assumed super-admin out of the box, but feel free to change this or leave as an empty array if you're not using roles
@@ -73,7 +73,7 @@ bootstrap/app.php ``` bootstrapMultiTenancy() ```, but, of course, you are free 
 constant however you wish, but in order for this package to work it must be set.
 
 
-###Usage
+### Usage
 
 To avoid having a foreign key on every single database table, the multi-tenancy package uses 
 a models relationships to constrain queries. There a three ways a model can be connected to a 
@@ -108,7 +108,7 @@ One final scenario is if your model is a polymorphic many-to-many and could pote
 
 In this example we have a Phone model which stores numbers against various models: users, drivers, and locations, so we need to check whether it belongs to our given tenant through any of those connections.
 
-###User Model
+### User Model
 Because the multi-tenancy package allows you to have a single database, it means a user can belong to more than one tenant if you want them to, useful for admin roles (although I recommend using the ignore-roles config value). If you use the sub-domain solution for multi-tenancy this will force the user to login to new tenant areas but it means they can have the same credentials, roles, and permissions across tenants. 
 
 Your User model needs to use the ``` IsMultiTenantUser ``` trait if you are using roles, it provides a piece of logic for the scopes, but it also uses the ``` MorphToTenant ``` trait and sets the roles relationship for you. If you're not using roles, be sure to use the ``` MorphToTenant ``` trait in your User model.
